@@ -21,14 +21,12 @@
             Projects
         </a>
     </li>
-    {% if user == 'dev' %}
-        <li>
-            <a href="tasks">
-                <i class="fa-solid fa-laptop-code"></i>
-                My Tasks
-            </a>
-        </li>
-    {% endif %}
+    <li>
+        <a href="tasks">
+            <i class="fa-solid fa-laptop-code"></i>
+            My Tasks
+        </a>
+    </li>
     <li>
         <a href="kanban">
             <i class="fa-solid fa-rectangle-list"></i>
@@ -44,5 +42,5 @@
 {% endblock links %}
 
 {% block content %}
-    Projects Page
+    <h3>Projects Page for {{ user.first_name }} {{ user.last_name }}</h3>
 {% endblock content %}
