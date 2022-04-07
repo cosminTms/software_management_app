@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block links %}
+    <li class="active">
+        <a href="{{ url_for('views.home') }}">
+            <i class="fas fa-home"></i>Home
+                    </a>
+    </li>
+    <li>
+        <a href="{{ url_for('views.teams') }}">
+            <i class="fa-solid fa-people-group"></i>
+            {%  if user == 'dev' %}
+                My Team
+            {%  else %}
+                Teams
+            {% endif %}
+        </a>
+    </li>
+    <li>
+        <a href="{{ url_for('views.projects') }}">
+            <i class="fa-solid fa-folder-open"></i>
+            Projects
+        </a>
+    </li>
+    <li>
+        <a href="{{ url_for('views.tasks') }}">
+            <i class="fa-solid fa-laptop-code"></i>
+            My Tasks
+        </a>
+    </li>
+    <li>
+        <a href="{{ url_for('views.kanban') }}">
+            <i class="fa-solid fa-rectangle-list"></i>
+            Kanban Board
+        </a>
+    </li>
+    <li>
+        <a href="{{ url_for('views.issues') }}">
+            <i class="fa-solid fa-bug"></i>
+            Issues
+        </a>
+    </li>
+{% endblock links %}
+
+{% block content %}
+    <h3>Home Page for {{ user }}</h3>
+{% endblock content %}
