@@ -30,7 +30,6 @@
 
             <ul class="list-unstyled components-links links" id="menu">
                 <p><em>You make IT happen</em></p>
-{#                {% block links %}{% endblock %}#}
                 <li>
                     <a href="{{ url_for('views.home') }}">
                         <i class="fas fa-home"></i>
@@ -40,11 +39,7 @@
                 <li>
                     <a href="{{ url_for('views.teams') }}">
                         <i class="fa-solid fa-people-group"></i>
-                        {%  if user == 'dev' %}
-                            My Team
-                        {%  else %}
-                            Teams
-                        {% endif %}
+                        Teams
                     </a>
                 </li>
                 <li>
@@ -65,15 +60,22 @@
                         Kanban Board
                     </a>
                 </li>
+                {% if current_user.roles[0].name in ['Admin',] %}
+                    <li>
+                            <a href="{{ url_for('auth.register') }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                Register New User
+                            </a>
+                    </li>
+                {% endif %}
                 <li>
                     <a href="{{ url_for('views.issues') }}">
                         <i class="fa-solid fa-bug"></i>
-                        Issues
+                        Issues Discussion
                     </a>
                 </li>
             </ul>
             <ul id="links" class="list-unstyled links">
-{#                {% block my_account %}{% endblock %}#}
                 <li>
                     <a href="/account">My Account</a>
                 </li>

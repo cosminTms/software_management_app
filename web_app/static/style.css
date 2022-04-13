@@ -161,7 +161,11 @@ ul ul a {
 }
 
 .account-heading {
-  font-size: 2.5rem;
+    font-size: 2.5rem;
+}
+
+.form-center{
+    text-align: center;
 }
 
 /* ---------------------------------------------------

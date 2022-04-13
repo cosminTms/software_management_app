@@ -2,4 +2,5 @@
 
 {% block content %}
     <h3>Home Page for {{ user.first_name }} {{ user.last_name }}</h3>
+    {{ current_user.roles[0].name }}
 {% endblock content %}
