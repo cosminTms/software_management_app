@@ -20,17 +20,63 @@
 <body>
     <div class="wrapper">
         <!---Sidebar  --->
-            <nav id="sidebar">
+        <nav id="sidebar">
             <div class="sidebar-header">
                 <div class="resize" align="left">
-                    <img src="../static/logo.png"  style="width:3em; height:3em; display:inline">
-                    <h3 style="display:inline; padding: 10px;">UniTech</h3>
+                    <a href="{{ url_for('views.home') }}"><img src="../static/logo.png"  style="width:3em; height:3em; display:inline"></a>
+                    <a href="{{ url_for('views.home') }}"><h3 style="display:inline; padding: 10px;">UniTech</h3></a>
                 </div>
             </div>
 
-            <ul class="list-unstyled components" id="menu">
+            <ul class="list-unstyled components-links links" id="menu">
                 <p><em>You make IT happen</em></p>
-                {% block links %}{% endblock %}
+{#                {% block links %}{% endblock %}#}
+                <li>
+                    <a href="{{ url_for('views.home') }}">
+                        <i class="fas fa-home"></i>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('views.teams') }}">
+                        <i class="fa-solid fa-people-group"></i>
+                        {%  if user == 'dev' %}
+                            My Team
+                        {%  else %}
+                            Teams
+                        {% endif %}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('views.projects') }}">
+                        <i class="fa-solid fa-folder-open"></i>
+                        Projects
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('views.tasks') }}">
+                        <i class="fa-solid fa-laptop-code"></i>
+                        My Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('views.kanban') }}">
+                        <i class="fa-solid fa-rectangle-list"></i>
+                        Kanban Board
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('views.issues') }}">
+                        <i class="fa-solid fa-bug"></i>
+                        Issues
+                    </a>
+                </li>
+            </ul>
+            <ul id="links" class="list-unstyled links">
+{#                {% block my_account %}{% endblock %}#}
+                <li>
+                    <a href="/account">My Account</a>
+                </li>
                 <li>
                     <a id="logout" href="/logout">Logout</a>
                 </li>
@@ -38,7 +84,7 @@
         </nav>
 
         <!---Main Content--->
-        <div id="main">
+        <main id="main">
             {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
@@ -55,9 +101,10 @@
                     </button>
                 </div>
             </nav>
-        <div class="content">
-            {% block content %}{% endblock %}
-        </div>
+            <div class="content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
     </div>
 
     <!--- --->

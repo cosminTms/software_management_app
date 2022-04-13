@@ -1,45 +1,4 @@
 {% extends "home.html" %}
-{% block links %}
-    <li>
-        <a href="home">
-            <i class="fas fa-home"></i>Home
-                    </a>
-    </li>
-    <li>
-        <a href="teams">
-            <i class="fa-solid fa-people-group"></i>
-            {%  if user == 'dev' %}
-                My Team
-            {%  else %}
-                Teams
-            {% endif %}
-        </a>
-    </li>
-    <li class="active">
-        <a href="projects">
-            <i class="fa-solid fa-folder-open"></i>
-            Projects
-        </a>
-    </li>
-    <li>
-        <a href="tasks">
-            <i class="fa-solid fa-laptop-code"></i>
-            My Tasks
-        </a>
-    </li>
-    <li>
-        <a href="kanban">
-            <i class="fa-solid fa-rectangle-list"></i>
-            Kanban Board
-        </a>
-    </li>
-    <li>
-        <a href="issues">
-            <i class="fa-solid fa-bug"></i>
-            Issues
-        </a>
-    </li>
-{% endblock links %}
 
 {% block content %}
     <h3>Projects Page for {{ user.first_name }} {{ user.last_name }}</h3>

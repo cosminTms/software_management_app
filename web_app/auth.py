@@ -9,6 +9,8 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('views.home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         email = form.email.data
@@ -32,6 +34,8 @@ def register():
 
 @auth.route('/login', methods=['GET','POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('views.home'))
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data

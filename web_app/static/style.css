@@ -78,14 +78,14 @@ a:focus {
     background: #015a73;
 }
 
-#sidebar ul.components {
-    padding: 20px 0;
+#sidebar ul.components-links {
+    padding: 10px 0;
     border-bottom: 1px solid #024254;
 }
 
 #sidebar ul p {
     color: #fff;
-    padding: 10px;
+    padding: 5px;
 }
 
 #sidebar ul li a {
@@ -143,6 +143,25 @@ ul ul a {
 
 .content {
     text-align: center;
+}
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+}
+
+.account-heading {
+  font-size: 2.5rem;
 }
 
 /* ---------------------------------------------------
