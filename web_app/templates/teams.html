@@ -1,5 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3>Teams Page for {{ user.first_name }} {{ user.last_name }}</h3>
+    <div class="container">
+          <div class="row">
+              <div class="col align-self-center">
+                  <h1 style="display:inline">Teams</h1>
+                  {% if current_user.roles[0].name in ['Admin',] %}
+                      <button type="button" id="newTeam" class="btn" onClick="newTeam()" style="margin: 0px 0px 15px 0px">
+                          <i class="fa-solid fa-circle-plus"></i>
+                      </button>
+                  {% endif %}
+              </div>
+          </div>
+        <div class="content-list-body row justify-content-center">
+            {% for team in teams %}
+                <div class="col-md-5">
+                    <div class="card card-team">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <a href="{{ url_for('teams.team', team_id=team.id) }}"><h5 data-filter-by="text">{{ team.name }}</h5></a>
+                                <span>{{ team.projects |length }} Project(s), {{team.users|length}} Member(s)</span>
+                            </div>
+                            <ul class="avatars">
+                                {% for user in team.users %}
+                                    <li>
+                                      <a href="#" data-toggle="tooltip" title="{{ user.first_name +  ' ' + user.last_name }}">
+                                        <img alt="{{ user.first_name, ' ', user.last_name }}" class="avatar" src="../static/profile_pics/{{ user.image_file }}" />
+                                      </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {{ content }}
+{#    {% if current_user.roles[0].name in ['Admin',] %}#}
+{#    {% endif %}#}
 {% endblock content %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">Teams</li>
+{% endblock breadcrumb %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <div class="content-section">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">New Team</legend>
+                        <div class="form-group row align-items-center">
+                            {{ form.name.label(class="col-3", placeholder="Team Name") }}
+
+                            {% if form.name.errors %}
+                                {{ form.name(class="form-control col form-center is-invalid", placeholder='Team Name') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.name(class="form-control col form-center", placeholder='Team Name') }}
+                            {% endif %}
+                        </div>
+                        <br>
+                        <div class="form-group row align-items-center">
+                            {{ form.description.label(class="col-3") }}
+
+                            {% if form.description.errors %}
+                                {{ form.description(class="form-control col is-invalid", placeholder='Team Description') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.description(class="form-control col", placeholder='Team Description') }}
+                            {% endif %}
+                        </div>
+                        <br>
+                        <legend class="border-bottom mb-4">Team Members</legend>
+                        <div class="users-manage" data-filter-list="form-group-users">
+{#                            <div class="input-group input-group-round col-3 mx-auto">#}
+{#                              <div class="input-group-prepend">#}
+{#                                <span class="input-group-text">#}
+{#                                  <i class="fa-solid fa-filter"></i>#}
+{#                                </span>#}
+{#                              </div>#}
+{#                              <input type="search" class="form-control filter-list-input form-center" placeholder="Filter members" aria-label="Filter Members">#}
+{#                            </div>#}
+                            <div class="form-group-users col-8 mx-auto memberList">
+                                {% for user in users %}
+                                    <div class="custom-control custom-checkbox teamMember">
+                                        <input name="user-manage-{{ user.id }}" type="checkbox" class="custom-control-input" id="user-manage-{{ user.id }}">
+                                        <label class="custom-control-label" for="user-manage-{{ user.id }}">
+                                          <span class="d-flex align-items-center">
+                                            <img alt="{{ user.first_name + ' ' + user.last_name}}" src="../static/profile_pics/{{ user.image_file }}" class="avatar mr-2" />
+                                            <span class="h6 mb-0 memberName" data-filter-by="text">{{ user.first_name + ' ' + user.last_name}} <small>({{ user.roles[0].name }})</small></span>
+                                          </span>
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </fieldset>
+                    <br>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{{ url_for('teams.teamss') }}">Teams</a></li>
+    <li class="breadcrumb-item active" aria-current="page">New Team</li>
+{% endblock breadcrumb %}

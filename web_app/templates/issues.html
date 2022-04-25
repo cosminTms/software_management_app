@@ -3,3 +3,7 @@
 {% block content %}
     <h3>Issues Page for {{ user.first_name }} {{ user.last_name }}</h3>
 {% endblock content %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">Issues</li>
+{% endblock breadcrumb %}

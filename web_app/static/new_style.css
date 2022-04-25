@@ -1,0 +1,19 @@
+@media (min-width: 992px){
+    .layout-nav-side {
+        display: flex;
+    }
+    .layout-nav-side > .navbar {
+      padding: 1.5rem;
+      width: 264px;
+      height: 100vh;
+      overflow-y: scroll;
+      -ms-overflow-style: none;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .layout-nav-side .main-container {
+      overflow: hidden;
+      flex: 1;
+      max-width: calc(100vw - 264px);
+    }
+}

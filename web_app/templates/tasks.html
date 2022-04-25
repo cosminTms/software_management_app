@@ -1,5 +1,123 @@
 {% extends "home.html" %}
 
 {% block content %}
-    <h3>Tasks Page for {{ user.first_name }} {{ user.last_name }}</h3>
+    <div class="row">
+      <div class="col align-self-center">
+          <h1 style="display:inline">My Tasks</h1>
+      </div>
+    </div>
+     <ul class="nav nav-tabs nav-fill" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#waiting" role="tab" aria-controls="waiting" aria-selected="true">Waiting</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#done" role="tab" aria-controls="done" aria-selected="false">Completed</a>
+        </li>
+     </ul>
+     <div class="tab-content">
+         <div class="tab-pane fade show active" id="waiting" role="tabpanel">
+            <div class="card-list-body">
+                {% for project, tasks in waiting.items() %}
+                    <div class="card-list">
+                        <div class="card-list-head">
+                            <h6>{{ project.name }}</h6>
+                        </div>
+                        <div class="card-list-body">
+                            {% for task in tasks %}
+                                <div class="card card-task">
+                                      <div class="card-body">
+                                        <div class="card-title">
+                                          <a href="{{ url_for('projects.task', task_id=task.id) }}"><h6 data-filter-by="text">{{ task.task_descriptions[0].title }}</h6></a>
+                                          <span class="text-small">Starting {{ task.start_date.strftime('%d %b') }} is due {{ task.deadline.strftime('%d %b') }}</span>
+                                        </div>
+                                        <div class="card-meta">
+                                          <ul class="avatars">
+                                              {% for assignee in task.users %}
+                                                  <li>
+                                                      <a href="#" data-toggle="tooltip" title="Kenny">
+                                                        <img alt="{{ assignee.first_name, ' ', assignee.last_name }}" class="avatar" src="../static/profile_pics/{{ assignee.image_file }}" />
+                                                      </a>
+                                                  </li>
+                                              {% endfor %}
+                                          </ul>
+                                          <div class="d-flex align-items-center">
+                                              <i class="fa-solid fa-list-check"></i>
+                                              {% if task.completed %}
+                                              <span>{{ task.story_points }}/{{ task.story_points }}points</span>
+                                              {% else %}
+                                              <span>0/{{ task.story_points }}points</span>
+                                              {% endif %}
+                                          </div>
+                                            <div class="dropdown card-options">
+                                                <button class="btn-options" type="button" id="task-dropdown-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="{{ url_for('projects.task', task_id=task.id) }}">Edit Task</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+         <div class="tab-pane fade" id="done" role="tabpanel">
+             <div class="card-list-body">
+                {% for project, tasks in done.items() %}
+                    <div class="card-list">
+                        <div class="card-list-head">
+                            <h6>{{ project.name }}</h6>
+                        </div>
+                        <div class="card-list-body">
+                            {% for task in tasks %}
+                                <div class="card card-task">
+                                      <div class="card-body">
+                                        <div class="card-title">
+                                          <a href="{{ url_for('projects.task', task_id=task.id) }}"><h6 data-filter-by="text">{{ task.task_descriptions[0].title }}</h6></a>
+                                          <span class="text-small">Starting {{ task.start_date.strftime('%d %b') }} is due {{ task.deadline.strftime('%d %b') }}</span>
+                                        </div>
+                                        <div class="card-meta">
+                                          <ul class="avatars">
+                                              {% for assignee in task.users %}
+                                                  <li>
+                                                      <a href="#" data-toggle="tooltip" title="Kenny">
+                                                        <img alt="{{ assignee.first_name, ' ', assignee.last_name }}" class="avatar" src="../static/profile_pics/{{ assignee.image_file }}" />
+                                                      </a>
+                                                  </li>
+                                              {% endfor %}
+                                          </ul>
+                                          <div class="d-flex align-items-center">
+                                              <i class="fa-solid fa-list-check"></i>
+                                              {% if task.completed %}
+                                              <span>{{ task.story_points }}/{{ task.story_points }}points</span>
+                                              {% else %}
+                                              <span>0/{{ task.story_points }}points</span>
+                                              {% endif %}
+                                          </div>
+                                            <div class="dropdown card-options">
+                                                <button class="btn-options" type="button" id="task-dropdown-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="{{ url_for('projects.task', task_id=task.id) }}">Edit Task</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+         </div>
+    </div>
 {% endblock content %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">My Tasks</li>
+{% endblock breadcrumb %}

@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-11 col-xl-10">
+                <div class="page-header">
+                    <h1>{{ project.name }}</h1>
+                    <p class="lead">{{ project.description }}</p>
+                    {% set days_remaining = (project.deadline - today).days %}
+                    <div>
+                        <div class="progress" style="height: 20px;">
+                            {% if days_remaining < 7 %}
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentage }}%</div>
+                            {% elif days_remaining < 30%}
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentage }}%</div>
+                            {% else %}
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: {{ percentage }}%" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100">{{ percentage }}%</div>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex justify-content-between text-small">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-list-check"></i>
+                                <span>{{ completed }}/{{ total }}</span>
+                            </div>
+                            <span>Due {{ days_remaining }} days:
+                                {% if days_remaining < 7 %}
+                                    <b style="color: red;">{{ project.deadline.strftime("%d %B %Y") }}</b>
+                                {% elif days_remaining <30 %}
+                                    <b style="color: #ebc334;">{{ project.deadline.strftime("%d %B %Y") }}</b>
+                                {% else %}
+                                    <b style="color: green;">{{ project.deadline.strftime("%d %B %Y") }}</b>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs nav-fill" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Information</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#devCycle" role="tab" aria-controls="devCycle" aria-selected="false">Development Cycle</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#backlog" role="tab" aria-controls="backlog" aria-selected="false">Backlog</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="false">People</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#prediction" role="tab" aria-controls="prediction" aria-selected="false">Prediction</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="info" role="tabpanel">
+                        <div class="content-list-body">
+                            <div class="d-flex form-control form-control-lg form-center" readonly>
+                                <span class="col-4">Start Date</span>
+                                <span class="col-8"><b>{{ project.start_date.strftime("%d %B %Y") }}</b></span>
+                            </div>
+                            <br>
+                            <div class="d-flex form-control form-control-lg form-center" readonly>
+                                <span class="col-4">Deadline Date</span>
+                                <span class="col-8"><b>{{ project.deadline.strftime("%d %B %Y") }}</b></span>
+                            </div>
+                            <br>
+                            <div class="d-flex form-control form-control-lg form-center" readonly>
+                                <span class="col-4">Completed Story Points</span>
+                                <span class="col-8"><b>{{ completed }}</b></span>
+                            </div>
+                            <br>
+                            <div class="d-flex form-control form-control-lg form-center" readonly>
+                                <span class="col-4">Total Story Points</span>
+                                <span class="col-8"><b>{{ total }}</b></span>
+                            </div>
+                            <br>
+                            <div class="d-flex form-control form-control-lg form-center" readonly>
+                                <span class="col-4">Teams Involved</span>
+                                <span class="col-8"><b>{{ project.teams | length }}</b></span>
+                            </div>
+                            <br>
+                            <div class="d-flex form-control form-control-lg form-center" readonly>
+                                <span class="col-4">People Involved</span>
+                                {% set peopleInvolved = namespace(value=0) %}
+                                {% for team in project.teams %}
+                                    {% set peopleInvolved.value = peopleInvolved.value + (team.users | length) %}
+                                {% endfor %}
+                                {% set peopleInvolved.value = peopleInvolved.value + (project.users | length)%}
+                                <span class="col-8"><b>{{ peopleInvolved.value }}</b></span>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="devCycle" role="tabpanel">
+                        <div class="content-list-body">
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>1. Conception</h6>
+                                </div>
+                                <div class="card-list-body">
+                                    <ol class="list-group list-group-activity">
+                                        <li class="list-group-item">
+                                            <div class="media align-items-center">
+                                                <ul class="avatars">
+                                                    <li>
+                                                        <div class="avatar bg-primary">
+                                                            <i class="fa-solid fa-folder-plus"></i>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <img alt="{{ admin.first_name, ' ', admin.last_name }}" src="../static/profile_pics/{{ admin.image_file }}" class="avatar" />
+                                                    </li>
+                                                </ul>
+                                                <div class="media-body">
+                                                    <div>
+                                                        <span class="h6">{{ admin.first_name + ' ' + admin.last_name }}<small>(Admin)</small> </span><span>created <a href="{{ url_for('projects.project', project_id=project.id) }}">this</a> new project </span>
+                                                    </div>
+                                                    <span class="text-small">{{ project.start_date.strftime("%d %B %Y") }}</span>
+{#                                                    <span class="text-small">{{ project.created_at.strftime("%d %B %Y") }}</span>#}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>2. Inception</h6>
+                                </div>
+                                <div class="card-list-body">
+                                    <ol class="list-group list-group-activity">
+                                        {% for pm in project.managers %}
+                                            <li class="list-group-item">
+                                                <div class="media align-items-center">
+                                                    <ul class="avatars">
+                                                        <li>
+                                                            <div class="avatar bg-primary">
+                                                                <i class="fa-solid fa-user-plus"></i>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <img alt="{{ pm.first_name, ' ', pm.last_name }}" src="../static/profile_pics/{{ pm.image_file }}" class="avatar" />
+                                                        </li>
+                                                    </ul>
+                                                    <div class="media-body">
+                                                        <div>
+                                                            <span>Project Manager </span><span class="h6">{{ pm.first_name + ' ' + pm.last_name }} </span><span>has been assigned to <a href="{{ url_for('projects.project', project_id=project.id) }}">this</a> project </span>
+                                                        </div>
+                                                        <span class="text-small">{{ project.start_date.strftime("%d %B %Y") }}</span>
+    {#                                                    <span class="text-small">{{ project.managers[0].added_at.strftime("%d %B %Y") }}</span>#}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                        {% for team in project.teams %}
+                                            <li class="list-group-item">
+                                                <div class="media align-items-center">
+                                                    <ul class="avatars">
+                                                        <li>
+                                                            <div class="avatar bg-primary">
+                                                                <i class="fa-solid fa-people-group"></i>
+                                                            </div>
+                                                        </li>
+                                                        {% for u in team.users %}
+                                                            <li>
+                                                                <img alt="{{ u.first_name, ' ', u.last_name }}" src="../static/profile_pics/{{ u.image_file }}" class="avatar" />
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                    <div class="media-body">
+                                                        <div>
+                                                            <span>Team </span><span class="h6">{{ team.name }} </span><span>has been assigned to <a href="{{ url_for('projects.project', project_id=project.id) }}">this </a> project </span>
+                                                        </div>
+                                                        <span class="text-small">{{ project.start_date.strftime("%d %B %Y") }}</span>
+    {#                                                    <span class="text-small">{{ project.managers[0].added_at.strftime("%d %B %Y") }}</span>#}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                        {% for us in project.users %}
+                                            <li class="list-group-item">
+                                                <div class="media align-items-center">
+                                                    <ul class="avatars">
+                                                        <li>
+                                                            <div class="avatar bg-primary">
+                                                                <i class="fa-solid fa-user-plus"></i>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <img alt="{{ us.first_name, ' ', us.last_name }}" src="../static/profile_pics/{{ us.image_file }}" class="avatar" />
+                                                        </li>
+                                                    </ul>
+                                                    <div class="media-body">
+                                                        <div>
+                                                            <span>User </span><span class="h6">{{ us.first_name + ' ' + us.last_name }} </span><span>(@{{ us.roles[0].name }}) has been assigned to <a href="{{ url_for('projects.project', project_id=project.id) }}">this</a> project </span>
+                                                        </div>
+                                                        <span class="text-small">{{ project.start_date.strftime("%d %B %Y") }}</span>
+    {#                                                    <span class="text-small">{{ project.managers[0].added_at.strftime("%d %B %Y") }}</span>#}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>3. Iterations</h6>
+                                </div>
+                                <div class="card-list-body">
+{#                                    {% set sprints = project.devPhase.iterations %}#}
+{#                                    {% for sprint in range(sprints) %}#}
+{#                                        <div class="card-list">#}
+{#                                            <div class="card-list">#}
+{#                                                <div class="card-list-head">#}
+{#                                                    <h6>Sprint {{ sprint }}</h6>#}
+{#                                                </div>#}
+{#                                                <div class="card-list-body">#}
+{#                                                    <ol class="list-group list-group-activity">#}
+{#                                                        <li class="list-group-item">#}
+{#                                                            <div class="media align-items-center">#}
+{#                                                                <ul class="avatars">#}
+{#                                                                    <li>#}
+{#                                                                        <div class="avatar bg-primary">#}
+{#                                                                            <i class="fa-solid fa-folder-plus"></i>#}
+{#                                                                        </div>#}
+{#                                                                    </li>#}
+{#                                                                    <li>#}
+{#                                                                        <img alt="{{ admin.first_name, ' ', admin.last_name }}" src="../static/profile_pics/{{ admin.image_file }}" class="avatar" />#}
+{#                                                                    </li>#}
+{#                                                                </ul>#}
+{#                                                                <div class="media-body">#}
+{#                                                                    <div>#}
+{#                                                                        <span class="h6">{{ admin.first_name + ' ' + admin.last_name }}<small>(Admin)</small> </span><span>created <a href="{{ url_for('projects.project', project_id=project.id) }}">this</a> new project </span>#}
+{#                                                                    </div>#}
+{#                                                                    <span class="text-small">{{ project.start_date.strftime("%d %B %Y") }}</span>#}
+                {#                                                    <span class="text-small">{{ project.created_at.strftime("%d %B %Y") }}</span>#}
+{#                                                                </div>#}
+{#                                                            </div>#}
+{#                                                        </li>#}
+{#                                                    </ol>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    {% endfor %}#}
+                                        <div class="card-list">
+                                            <div class="card-list-head">
+                                                <h6>Sprint 1</h6>
+                                            </div>
+                                            <div class="card-list-body">
+                                                <ol class="list-group list-group-activity">
+                                                    <li class="list-group-item">
+                                                        <div class="media align-items-center">
+                                                            <ul class="avatars">
+                                                                <li>
+                                                                    <div class="avatar bg-primary">
+                                                                        <i class="fa-solid fa-sitemap"></i>
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <img alt="{{ admin.first_name, ' ', admin.last_name }}" src="../static/profile_pics/{{ admin.image_file }}" class="avatar" />
+                                                                </li>
+                                                            </ul>
+                                                            <div class="media-body">
+                                                                <div>
+                                                                    <span class="h6">{{ admin.first_name + ' ' + admin.last_name }} </span><span>created project backlog </span>
+                                                                </div>
+                                                                <span class="text-small">{{ project.start_date.strftime("%d %B %Y") }}</span>
+                                    {#                                                    <span class="text-small">{{ project.created_at.strftime("%d %B %Y") }}</span>#}
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                        <div class="card-list">
+                                            <div class="card-list-head">
+                                                <h6>Sprint 2</h6>
+                                            </div>
+                                        </div>
+                                        <div class="card-list">
+                                            <div class="card-list-head">
+                                                <h6>Sprint 3</h6>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>4. Releasing</h6>
+                                </div>
+                            </div>
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>5. Maintainance</h6>
+                                </div>
+                            </div>
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>6. Retirement</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="backlog" role="tabpanel">
+                        <div class="content-list-body">
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>Backlog</h6>
+                                    <div class="dropdown card-options">
+                                        <button class="btn-options" type="button" id="backlog-dropdown-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="{{ url_for('projects.new_task', proiect_id=project.id) }}">Add New Task</a>
+                                            <div class="dropdown-divider"></div>
+{#                                            <a class="dropdown-item" href="{{ url_for('views.add_task', project_id=project.id) }}">Add Task from Database</a>#}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-list-body">
+                                    {% for task in project.tasks %}
+                                        <div class="card card-task">
+                                              <div class="card-body">
+                                                <div class="card-title">
+                                                  <a href="{{ url_for('projects.task', task_id=task.id) }}"><h6 data-filter-by="text">{{ task.task_descriptions[0].title }}</h6></a>
+                                                  <span class="text-small">Starting {{ task.start_date.strftime('%d %b') }} is due {{ task.deadline.strftime('%d %b') }}</span>
+                                                </div>
+                                                <div class="card-meta">
+                                                  <ul class="avatars">
+                                                      {% for assignee in task.users %}
+                                                          <li>
+                                                              <a href="#" data-toggle="tooltip" title="Kenny">
+                                                                <img alt="{{ assignee.first_name, ' ', assignee.last_name }}" class="avatar" src="../static/profile_pics/{{ assignee.image_file }}" />
+                                                              </a>
+                                                          </li>
+                                                      {% endfor %}
+                                                  </ul>
+                                                  <div class="d-flex align-items-center">
+                                                      <i class="fa-solid fa-list-check"></i>
+                                                      {% if task.completed %}
+                                                      <span>{{ task.story_points }}/{{ task.story_points }}points</span>
+                                                      {% else %}
+                                                      <span>0/{{ task.story_points }}points</span>
+                                                      {% endif %}
+                                                  </div>
+                                                    <div class="dropdown card-options">
+                                                        <button class="btn-options" type="button" id="task-dropdown-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a class="dropdown-item" href="{{ url_for('projects.task', task_id=task.id) }}">Edit Task</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                              </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="people" role="tabpanel">
+                        <div class="content-list-body">
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>Project Manager</h6>
+                                </div>
+                                <div class="card-list-body">
+                                    {% for pm in project.managers %}
+                                        <div class="card card-task">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                      <a href="#"><h6 data-filter-by="text">{{ pm.first_name + ' ' + pm.last_name }}</h6></a>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <ul class="avatars">
+                                                      <li>
+                                                          <a href="#" data-toggle="tooltip" title="{{ pm.first_name }}">
+                                                            <img alt="{{ pm.first_name, ' ', pm.last_name }}" class="avatar" src="../static/profile_pics/{{ pm.image_file }}" />
+                                                          </a>
+                                                      </li>
+                                                  </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>Teams</h6>
+                                </div>
+                                <div class="card-list-body">
+                                    {% for team in project.teams %}
+                                        <div class="card card-task">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                      <a href="{{ url_for('teams.team', team_id=team.id) }}"><h6 data-filter-by="text">{{ team.name }}</h6></a>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <ul class="avatars">
+                                                        {% for us in team.users %}
+                                                          <li>
+                                                              <a href="#" data-toggle="tooltip" title="{{ us.first_name }}">
+                                                                <img alt="{{ us.first_name, ' ', us.last_name }}" class="avatar" src="../static/profile_pics/{{ us.image_file }}" />
+                                                              </a>
+                                                          </li>
+                                                        {% endfor %}
+                                                  </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="card-list">
+                                <div class="card-list-head">
+                                    <h6>Individual Members</h6>
+                                </div>
+                                <div class="card-list-body">
+                                    {% for usr in project.users %}
+                                        <div class="card card-task">
+                                            <div class="card-body">
+                                                <div class="card-title">
+                                                      <a href="#"><h6 data-filter-by="text">{{ usr.first_name + ' ' + usr.last_name }}</h6></a>
+                                                </div>
+                                                <div class="card-meta">
+                                                    <ul class="avatars">
+                                                      <li>
+                                                          <a href="#" data-toggle="tooltip" title="{{ usr.first_name }}">
+                                                            <img alt="{{ usr.first_name, ' ', usr.last_name }}" class="avatar" src="../static/profile_pics/{{ usr.image_file }}" />
+                                                          </a>
+                                                      </li>
+                                                  </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">
+        <a href="{{ url_for('projects.projectss') }}">Projects</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">{{ project.name }}</li>
+{% endblock breadcrumb %}

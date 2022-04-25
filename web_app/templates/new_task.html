@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <div class="content-section">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">New Task</legend>
+                        <div class="form-group row align-items-center">
+                            {{ form.title.label(class="col-3") }}
+
+                            {% if form.title.errors %}
+                                {{ form.title(class="form-control col is-invalid", placeholder='Task Name') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.title.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.title(class="form-control col", placeholder='Task Name') }}
+                            {% endif %}
+                        </div>
+                        <br>
+                        <div class="form-group row align-items-center">
+                            {{ form.description.label(class="col-3") }}
+
+                            {% if form.description.errors %}
+                                {{ form.description(class="form-control col is-invalid", placeholder='Task Description') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.description(class="form-control col", placeholder='Task Description') }}
+                            {% endif %}
+                        </div>
+                        <br>
+                        <legend class="border-bottom mb-4">Timetable</legend>
+                        <div class="form-group row align-items-center">
+                            {{ form.start_date.label(class="col-3") }}
+
+                            {% if form.start_date.errors %}
+                                {{ form.start_date(class="form-control col is-invalid", placeholder='Project Start Date') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.start_date.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.start_date(class="form-control col", placeholder='Project Start Date') }}
+                            {% endif %}
+                        </div>
+                        <br>
+                        <div class="form-group row align-items-center">
+                            {{ form.deadline.label(class="col-3") }}
+
+                            {% if form.deadline.errors %}
+                                {{ form.deadline(class="form-control col is-invalid", placeholder='Project Deadline') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.deadline.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.deadline(class="form-control col", placeholder='Project Deadline') }}
+                            {% endif %}
+                        </div>
+                        <br>
+                        <legend class="border-bottom mb-4">Story Points</legend>
+                        <div class="form-group row align-items-center">
+                            {{ form.story_points.label(class="col-3") }}
+
+                            {% if form.story_points.errors %}
+                                {{ form.story_points(class="form-control col is-invalid", placeholder='assign an integer number') }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.story_points.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.story_points(class="form-control col", placeholder='assign an integer number') }}
+                            {% endif %}
+                        </div>
+                        <br>
+                        <legend class="border-bottom mb-4">Assigned People</legend>
+                        <div class="users-manage" data-filter-list="form-group-users">
+                            <div class="form-group-users col-8 mx-auto">
+                                {% for user in users %}
+                                    <div class="custom-control custom-checkbox">
+                                        <input name="user-manage-{{ user.id }}" type="checkbox" class="custom-control-input" id="user-manage-{{ user.id }}">
+                                        <label class="custom-control-label" for="user-manage-{{ user.id }}">
+                                          <span class="d-flex align-items-center">
+                                            <img alt="{{ user.first_name + ' ' + user.last_name}}" src="../static/profile_pics/{{ user.image_file }}" class="avatar mr-2" />
+                                              <span class="h6 mb-0 memberName" data-filter-by="text">{{ user.first_name + ' ' + user.last_name}}<small>({{ user.roles[0].name }})</small></span>
+                                          </span>
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </fieldset>
+                    <br>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{{ url_for('projects.projectss') }}">Projects</a></li>
+{#    <li class="breadcrumb-item"><a href="{{ url_for('projects.project', project_id=project.id) }}">{{ project.name }}</a></li>#}
+    <li class="breadcrumb-item active" aria-current="page">New Task</li>
+{% endblock breadcrumb %}
+
