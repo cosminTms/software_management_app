@@ -183,3 +183,23 @@ def task(task_id):
         assigned_users = task.users
         unassigned_users = set(users) - set(assigned_users)
     return (render_template("task.html", user=current_user, form=form, project=project, task=task, assigned_users=assigned_users, unassigned_users=unassigned_users))
+
+@projects.route('/tasks')
+@login_required
+def tasks():
+    tasks = current_user.tasks
+    done = {}
+    waiting = {}
+    for task in tasks:
+        project = task.projects[0]
+        if task.completed:
+            if project in done:
+                done[project].append(task)
+            else:
+                done[project] = [task,]
+        else:
+            if project in waiting:
+                waiting[project].append(task)
+            else:
+                waiting[project] = [task,]
+    return render_template("tasks.html", waiting=waiting, done=done, user=current_user)

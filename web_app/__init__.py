@@ -21,17 +21,17 @@ def create_app():
 
     db.init_app(app)
 
-    from web_app.views import views
-    from web_app.auth import auth
+    from web_app.authentication.auth import auth
     from web_app.main.routes import main
     from web_app.teams.routes import teams
     from web_app.projects.routes import projects
+    from web_app.issues.issues import issues
 
-    app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(main, url_prefix='/')
     app.register_blueprint(teams, url_prefix='/')
     app.register_blueprint(projects, url_prefix='/')
+    app.register_blueprint(issues, url_prefix='/')
 
     from web_app.models import User, Role, Team, Project
 
